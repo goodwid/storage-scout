@@ -1,0 +1,25 @@
+{
+  "name": "storage-scout",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha",
+    "lint": "eslint .",
+    "pretest": "npm run lint"
+  },
+  "keywords": [
+    "database",
+    "file"
+  ],
+  "author": "David Goodwin <goodwid@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "sander": "^0.5.1"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "eslint": "^3.9.0",
+    "mocha": "^3.1.2"
+  }
+}
