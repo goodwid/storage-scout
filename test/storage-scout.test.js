@@ -3,16 +3,16 @@ const storageScout = require ('../index.js');
 const assert = require('chai').assert;
 
 let dataId;
-const testData = JSON.stringify({
+const testData = {
   title: 'test',
   data: 'Testing one.'
-});
+};
 
 describe('storage-scout testing',() => {
 
   describe('create', () => {
     it('writes to json file and returns an object', (done) =>{
-      storageScout.create(testData)
+      storageScout.create(JSON.stringify(testData))
       .then(data => {
         let obj = JSON.parse(data);
         dataId = obj.id;

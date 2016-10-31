@@ -1,7 +1,7 @@
 {
   "name": "storage-scout",
-  "version": "0.0.1",
-  "description": "",
+  "version": "0.1.0",
+  "description": "File system storage API",
   "main": "index.js",
   "scripts": {
     "test": "mocha",
@@ -14,6 +14,16 @@
     "file"
   ],
   "author": "David Goodwin <goodwid@gmail.com>",
+  "contributors": [
+    {
+      "name": "Dave Hanagan",
+      "email": ""
+    },
+    {
+      "name": "Yvonne Hayes",
+      "email": ""
+    }
+  ],
   "license": "MIT",
   "dependencies": {
     "sander": "^0.5.1"
