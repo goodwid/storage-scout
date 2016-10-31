@@ -1,51 +1,71 @@
 const storageScout = require ('../index.js');
+// const sander = require('sander');
 const assert = require('chai').assert;
 
+let dataId;
+const testData = JSON.stringify({
+  title: 'test',
+  data: 'Testing one.'
+});
 
-describe('books module',() => {
+describe('storage-scout testing',() => {
 
-  describe('on create', () =>{
-
-    it('writes to json file and returns an object', ( done ) =>{
-      storageScout.create({title:'herbook', pub_year:'1986'})
+  describe('create', () => {
+    it('writes to json file and returns an object', (done) =>{
+      storageScout.create(testData)
       .then(data => {
-        assert.isJson(data);
+        let obj = JSON.parse(data);
+        dataId = obj.id;
+        assert.isOk(dataId);
         done();
       })
-      .catch(error =>{
-        assert.isOk(error);
-        done();
+      .catch(err =>{
+        done(err);
       });
     });
-
   });
 
-  describe('on update', () =>{
+  describe('update', () =>{
     it('renames a filename and resource and returns an object', (done) =>{
-      storageScout.update(1, {title:'herbook', pub_year:'2008', resource:'herbook_2008'})
+      storageScout.update(dataId, JSON.stringify({title:'updated', data: 'Testing one'}))
       .then( data => {
-        assert.isOk(data);
+        let obj = JSON.parse(data);
+        assert.equal(obj.id, dataId);
+        assert.equal(obj.title, 'updated');
         done();
       })
       .catch( err => {
-        assert.isOk(err);
-        done();
+        done(err);
       });
     });
-
   });
 
-  describe('on delete', () =>{
-
-    it('returns a delete message', (done) =>{
-      storageScout.delete(1)
+  describe('readOne', () =>{
+    it('gets single item by id', (done) =>{
+      storageScout.readOne(dataId)
       .then( data => {
-        assert.equal(data.message, 'deleted herbook_2008');
+        let obj = JSON.parse(data);
+        assert.equal(obj.id, dataId);
         done();
       })
       .catch( err => {
-        assert.isOk(err);
+        done(err);
+      });
+    });
+  });
+
+
+
+  describe('delete', () =>{
+    it('returns a delete message', (done) =>{
+      storageScout.delete(dataId)
+      .then( data => {
+        let obj = JSON.parse(data);
+        assert.equal(obj.message, `${dataId} deleted` );
         done();
+      })
+      .catch( err => {
+        done(err);
       });
     });
 
