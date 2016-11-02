@@ -15,7 +15,13 @@ if (!sander.existsSync(storageScout.dir)) sander.mkdir(storageScout.dir);
 storageScout.create = function(data){
   return generateId()
   .then(id => {
-    let obj = JSON.parse(data);
+    let obj = {};
+    try{
+      obj = JSON.parse(data);
+    }
+    catch(err) {
+      return Promise.reject(JSON.stringify({message: 'Data provided is not valid JSON.  Please check your inputs.'}));
+    }
     obj.id = id;
     const outFile = generateFilename(id);
     const outData = JSON.stringify(obj);
@@ -30,7 +36,7 @@ storageScout.create = function(data){
 storageScout.readAll = function() {
   return sander.readdir(storageScout.filePath)
   .then(files => files.map(file => storageScout.filePath + file))
-  .then(filefilePaths => filefilePaths.map(file => sander.readFile(file, {encoding: 'utf-8'})))
+  .then(filePaths => filePaths.map(file => sander.readFile(file, {encoding: 'utf-8'})))
   .then(data => Promise.all(data))
   .then(data => JSON.stringify(data.map(datum => JSON.parse(datum))));
 };
@@ -61,7 +67,13 @@ storageScout.update = function(id, data){
   const outFile = generateFilename(id);
   if (sander.existsSync(outFile)) {
     sander.unlink(outFile);
-    let obj = JSON.parse(data);
+    let obj = {};
+    try{
+      obj = JSON.parse(data);
+    }
+    catch(err) {
+      return Promise.reject(JSON.stringify({message: 'Data provided is not valid JSON.  Please check your inputs.'}));
+    }
     obj.id = id;
     return sander.writeFile(outFile, JSON.stringify(obj));
   } else {
