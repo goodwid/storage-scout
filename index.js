@@ -66,7 +66,6 @@ storageScout.readOne = function(id) {
 storageScout.update = function(id, data){
   const outFile = generateFilename(id);
   if (sander.existsSync(outFile)) {
-    sander.unlink(outFile);
     let obj = {};
     try{
       obj = JSON.parse(data);

@@ -15,12 +15,22 @@ describe('storage-scout testing',() => {
       storageScout.create(JSON.stringify(testData))
       .then(data => {
         let obj = JSON.parse(data);
-        dataId = obj.id;
+        dataId = obj.id.toString();
         assert.isOk(dataId);
         done();
       })
       .catch(err =>{
         done(err);
+      });
+    });
+    it('returns an error when given non-JSON data', (done) =>{
+      storageScout.create({data: 'bad'})
+      .then(data => {
+        done(data);
+      })
+      .catch(err =>{
+        assert.equal(err, '{"message":"Data provided is not valid JSON.  Please check your inputs."}');
+        done();
       });
     });
   });
@@ -34,8 +44,16 @@ describe('storage-scout testing',() => {
         assert.equal(obj.title, 'updated');
         done();
       })
-      .catch( err => {
-        done(err);
+      .catch(done);
+    });
+    it('returns an error when given non-JSON data', done =>{
+      storageScout.update('1', {data: 'bad'})
+      .then(data => {
+        done(data);
+      })
+      .catch(err =>{
+        assert.equal(err, '{"message":"Data provided is not valid JSON.  Please check your inputs."}');
+        done();
       });
     });
   });
@@ -43,21 +61,30 @@ describe('storage-scout testing',() => {
   describe('readOne', () =>{
     it('gets single item by id', (done) =>{
       storageScout.readOne(dataId)
-      .then( data => {
+      .then(data => {
         let obj = JSON.parse(data);
         assert.equal(obj.id, dataId);
         done();
       })
-      .catch( err => {
-        done(err);
-      });
+      .catch(done);
+    });
+  });
+
+  describe('readAll', () =>{
+    it('returns an array', (done) =>{
+      storageScout.readAll()
+      .then(data => {
+        let array = JSON.parse(data);
+        assert.isArray(array);
+        done();
+      })
+      .catch(done);
     });
   });
 
 
-
   describe('delete', () =>{
-    it('returns a delete message', (done) =>{
+    it('valid id request returns a delete message', (done) =>{
       storageScout.delete(dataId)
       .then( data => {
         let obj = JSON.parse(data);
@@ -66,6 +93,18 @@ describe('storage-scout testing',() => {
       })
       .catch( err => {
         done(err);
+      });
+    });
+    it('invalid id returns an error message.', (done) =>{
+      let badId = '34';
+      storageScout.delete(badId)
+      .then(data => {
+        done(data);
+      })
+      .catch( err => {
+        let obj = JSON.parse(err);
+        assert.equal(obj.err, `Unable to locate ${badId}`);
+        done();
       });
     });
 
