@@ -112,7 +112,9 @@ function generateFilename(id) {
 function generateId(){
   return sander.readdir(storageScout.filePath)
     .then(fileNames => {
-      const ids = fileNames.map(file => path.basename(file,'.json'));
+      const ids = fileNames
+        .map(file => path.extname(file) === '.json')
+        .map(file => path.basename(file,'.json'));
       return ids.length ? Math.max.apply(0, ids) + 1 : 1;
     });
 }

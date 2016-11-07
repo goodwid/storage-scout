@@ -61,3 +61,5 @@ storageScout.delete('1')
 
 
 These are standard CRUD operations on data.  Appropriate errors are returned if operations fail or if data provided is not valid JSON.
+
+Thanks to [Caitlin Araldi](https://github.com/caraldi) and [Dave Hanagan](https://github.com/billyham) for identifying a bug that causes the filestore to break when files such as .DS_store are present.
